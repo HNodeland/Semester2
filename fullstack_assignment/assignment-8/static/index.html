@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <script src="https://unpkg.com/vue@3.0.5/dist/vue.global.js"></script>
+        <script src="/static/app.js" defer></script>
+        <link rel="stylesheet" href="/static/style.css">
+        <title>Assignment 8</title>
+    </head>
+    <body>
+        <div id = "app">
+            <div id = "header">
+                <fieldset>
+                    <form v-if = "log_in" action = "#">
+                        <input type = "text" class = "textInput" v-model = "searchInput" placeholder = "Search">
+                        <input type = "button" class = "buttonInput" v-on:click = "search_entries" value = "Search">
+                        <br>
+                        <input type = "button" class = "buttonInput" v-on:click = "show_add_entry" value = "Add entry">
+                        <input type = "button" class = "buttonInput" id = "log_out_button" v-on:click = "log_out_user" value = "Log out" >
+                    </form>
+                </fieldset>
+                <fieldset>
+                    <form v-if = "!log_in" action = "#">
+                        <input type = "text" class = "textInput" v-model = "user_name" placeholder = "username">
+                        <input type = "text" class = "textInput" v-model = "user_password" placeholder = "password">
+                        <input type = "button" class = "buttonInput"  v-on:click = "log_in_user" value = "Log in">
+                    </form>
+                </fieldset>
+            </div>
+            <h1 style = "padding-left: 30%">{{ log_in_error }}</h1>
+            <div id = container v-if = "log_in">
+                <div id = "addressTableDiv">
+                    <table id = "addressTable">
+                            <tbody v-for = "(entry, index) in entries">
+                                <tr>
+                                    <td>{{ entry.name }}</td>
+                                    <td><button class = "buttonInputTable" v-bind:key = "entry.id" v-on:click = "show_edit_entry(index)">Edit</button></td>
+                                </tr>
+                                <tr>
+                                    <td>{{ entry.number }}</td>
+                                    <td><button class = "buttonInputTable" v-bind:key ="entry.id" v-on:click = "delete_entry(index)">Delete</button></td>
+                                </tr>
+                                <tr>
+                                    <td>{{ entry.email }}</td><td></td>
+                                </tr>
+                            </tbody>
+                    </table>
+                </div>
+                <div id = "empty1">
+                    <div v-if = "!add_entry_shown" id = "addEntryDiv">
+                        <h1>Add an entry</h1>
+                        <input class = "textInput" id = "addName" type = "text" placeholder = "Name" v-model = "new_name">
+                        <input class = "textInput" id = "addNumber" type = "text" placeholder = "Number" v-model = "new_number">
+                        <input class = "textInput" id = "addEmail" type = "text" placeholder = "Email" v-model = "new_email">
+                        <input class = "buttonInput" id = "addEntry" type = "button" value = "Submit" v-on:click = "add_entry">
+                        <p id = "addErrorMessage"></p>
+                    </div>
+                    <div v-if = "!edit_shown" id = "modifyEntryDiv">
+                        <h1>Edit an entry</h1>
+                        <input class = "textInput" id = "modifyName" type = "text" placeholder = "Name" v-model = "new_name">
+                        <input class = "textInput" id = "modifyNumber" type = "text" placeholder = "Number" v-model = "new_number">
+                        <input class = "textInput" id = "modifyEmail" type = "text" placeholder = "Email" v-model = "new_email">
+                        <input class = "buttonInput" id = "addEntry" type = "button" value = "Submit" v-on:click = "edit_entry(index)">
+                        <p id = "modifyErrorMessage"></p>
+                    </div>
+                </div>
+                <div id = "empty2">
+                    <table id = "searchTable">
+                        <tbody v-for = "entry in searchList">
+                            <tr>
+                                <td>{{ entry.name }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ entry.number }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ entry.email }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
